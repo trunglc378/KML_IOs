@@ -97,20 +97,64 @@ Ba cách:
 > **không dùng cho prod.** Với prod, nạp token qua màn hình `/settings` (lưu vào
 > Keychain của thiết bị).
 
-### Ba chat_id của dự án
+### Bảng chat_id của dự án
 
-| Flavor | chat_id | Ghi chú |
+Bot: **@KML_IOs_bot**, bot_id **8920168927**. (Không ghi token trong tài liệu này.)
+
+| Vai trò | chat_id | Ghi chú |
 |---|---|---|
-| dev | 5887530234 | chat cá nhân |
+| dev | 5887530234 | chat cá nhân — người nhận chính |
 | staging | -5152160106 | chat nhóm — **số âm** |
 | prod | -5022357153 | chat nhóm — **số âm** |
+| Ngoài whitelist | 8178322761 | chat cá nhân — dùng để thử ca `blocked` |
 
 > **chat_id của nhóm là số âm.** Giữ nguyên dấu trừ khi khai báo và khi truyền
 > vào Bot API. Bất kỳ chỗ nào validate “chỉ chữ số” sẽ chặn nhầm số âm.
+>
+> Mỗi flavor chỉ chấp nhận **đúng một** chat_id trong bảng trên. Gửi tới chat_id
+> ngoài whitelist của flavor đang chạy bị chặn ngay, **không phát sinh request**
+> (trạng thái `blocked`).
 
 ---
 
-## 5. Kiểm tra sau khi cài
+## 5. Nạp cấu hình bot trước khi chạy
+
+**Cách 1 — Qua màn hình `/settings` (khuyến nghị):**
+
+1. Mở app → **Cài đặt** (`/settings`).
+2. Nhập **bot token** và **chat_id** (ví dụ dev: `5887530234`).
+3. Nhấn **Lưu**.
+4. Nhấn **Kiểm tra kết nối** — phải báo **“Kết nối thành công”**.
+
+Token được lưu vào **Keychain của chính app**, không vào SQLite thường và không
+vào `shared_preferences`.
+
+**Cách 2 — Qua `--dart-define`:**
+
+    flutter run --release --dart-define=FLAVOR=dev \
+      --dart-define=TELEGRAM_BOT_TOKEN=<token>
+
+> **Cảnh báo:** cách này **nhúng token vào binary**. Token nằm trong file `.ipa`
+> và có thể bị trích xuất bằng công cụ phân tích. **Chỉ dùng cho build dev,**
+> **không dùng cho prod.** Với prod, nạp token qua màn hình `/settings`.
+
+---
+
+## 6. Xác nhận sau khi cài
+
+**Bước 1 — Thiết bị đã nhận:**
+
+    flutter devices
+
+**Bước 2 — Xem log khi app đang chạy:**
+
+    flutter logs
+
+**Bước 3 — Chạy bộ unit test (không cần thiết bị):**
+
+    flutter test test/
+
+**Bước 4 — Kiểm tra trong app:**
 
 1. Mở app → **Cài đặt** → trạng thái phải hiển thị **“đã cấu hình”** (màu xanh).
 2. Nhấn **Kiểm tra kết nối** → phải hiện **“Kết nối thành công”**.
