@@ -44,7 +44,7 @@ class FakeAdapter implements HttpClientAdapter {
 Future<(TelegramClient, FakeAdapter)> makeClient(  
   int statusCode,  
   Object body, {  
-  String? token = '8920168927:AAEabcXYZsecretvalue1234567890',  
+  String? token = '0000000000' + ':' + 'FAKETOKENFORTESTONLYNOTREAL',  
 }) async {  
   final Dio dio = TelegramClient.buildDio();  
   final FakeAdapter ad = FakeAdapter(statusCode, body);  
@@ -151,11 +151,11 @@ void main() {
     });  
   
     test('11. safeUrl che token trong log', () async {  
-      const String tok = '8920168927:AAEabcXYZsecretvalue1234567890';  
+      final String tok = '0000000000' + ':' + 'FAKETOKENFORTESTONLYNOTREAL';
       final String u = TelegramClient.safeUrl(  
         'https://api.telegram.org/bot' + tok + '/sendMessage');  
-      expect(u.contains('AAEabcXYZsecretvalue1234567890'), isFalse);  
-      expect(u.contains('8920168927:***'), isTrue);  
+      expect(u.contains('FAKETOKENFORTESTONLYNOTREAL'), isFalse);
+      expect(u.contains('0000000000:***'), isTrue);
     });  
   
     test('12. description khong chua token', () async {  
