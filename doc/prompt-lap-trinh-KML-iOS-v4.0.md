@@ -307,8 +307,9 @@ dữ liệu nằm trong tệp đính kèm. Cách này giữ phần văn bản lu
 
 | Tham số | dev | staging | prod | Nơi lưu |
 |---------|-----|---------|------|---------|
-| `BOT_TOKEN` | bot test | bot test | bot thật | `flutter_secure_storage` |
-| `CHAT_ID` | chat cá nhân | chat nhóm test | chat đích thật | Secure storage + whitelist |
+| `BOT_TOKEN` | `KML_IOs_bot` | `KML_IOs_bot` | `KML_IOs_bot` | `flutter_secure_storage` |
+| `CHAT_ID` | `5887530234` | `-5152160106` | `-5022357153` | Secure storage + whitelist theo flavor |
+| `WHITELIST` | chỉ `5887530234` | chỉ `-5152160106` | chỉ `-5022357153` | Secure storage; tách riêng mỗi flavor |
 | `API_BASE` | https://api.telegram.org | https://api.telegram.org | https://api.telegram.org | Hằng số trong code |
 | `TIMEOUT` | 15 giây | 15 giây | 30 giây | `telegram_config.dart` |
 | `MAX_RETRY` | 3 lần | 3 lần | 5 lần | `telegram_config.dart` |
@@ -530,11 +531,17 @@ chung hoặc gây hiểu nhầm là nguyên nhân phổ biến bị App Store Re
 
 ### 11.3 Scheme và build flavor
 
-| Flavor | Mục đích | Signing | Phân phối | Cấu hình bot |
-|--------|----------|---------|-----------|--------------|
-| `dev` | Phát triển hằng ngày | Development certificate | Cài trực tiếp lên thiết bị đã đăng ký | Bot test, chat cá nhân |
-| `staging` | Kiểm thử nội bộ | Development/Distribution | TestFlight internal | Bot test, chat nhóm test |
-| `prod` | Bản nộp/chính thức | Distribution certificate | App Store / TestFlight external | Bot thật, chat đích thật |
+| Flavor | Mục đích | Signing | Phân phối | Chat đích | Whitelist |
+|--------|----------|---------|-----------|-----------|-----------|
+| `dev` | Phát triển hằng ngày | Development certificate | Cài trực tiếp lên thiết bị đã đăng ký | `5887530234` | chỉ `5887530234` |
+| `staging` | Kiểm thử nội bộ | Development/Distribution | TestFlight internal | `-5152160106` | chỉ `-5152160106` |
+| `prod` | Bản nộp/chính thức | Distribution certificate | App Store / TestFlight external | `-5022357153` | chỉ `-5022357153` |
+
+**Cả ba flavor dùng chung một bot** — `KML_IOs_bot` (`@KML_IOs_bot`, bot_id `8920168927`). Vì token giống nhau, **bot KHÔNG còn là cơ chế phân biệt môi trường**. Ranh giới phân biệt chuyển sang `CHAT_ID` và whitelist.
+
+**Bắt buộc:** mỗi flavor nạp danh sách whitelist `chat_id` riêng, và chặn mọi `chat_id` nằm ngoài whitelist của flavor đang chạy. Không có cơ chế này, cấu hình nhầm `CHAT_ID` ở `dev` sẽ đẩy dữ liệu thử nghiệm vào chat chính thức mà **không gì chặn được**, vì cùng một bot thì cùng một token.
+
+`CHAT_ID` của group là **số âm** — giữ nguyên dấu trừ khi khai báo và khi truyền vào Bot API. Nếu có chỗ nào validate "chỉ chữ số", số âm sẽ bị chặn nhầm.
 
 ---
 
@@ -702,16 +709,21 @@ chat Telegram; mã nguồn **không có** liên kết giữa quy trình điều 
 
 ### 16.2 Trước khi viết code, hãy xác nhận
 
-Trả lời gọn bốn điểm này trước khi bắt đầu, để chốt các giá trị còn để trống:
+Ba chỉ tiêu chất lượng và các ngưỡng vận hành đã được chốt ở **Mục 18** — dùng thẳng
+giá trị đó, không hỏi lại. Còn một điểm cần xác nhận:
 
-1. Ba chỉ tiêu chất lượng trong SRS v4.0 Mục 5.3 (thời gian đến Telegram, tỷ lệ gửi
-   thành công, số lần thử lại tối đa) — giá trị cụ thể là bao nhiêu?
-2. `PACK_THRESHOLD` và `PACK_MAX_AGE` cho từng môi trường — chốt theo bảng ở Mục 6.6
-   hay theo giá trị khác?
-3. Bot test và chat test đã tạo chưa, và người nhận đã nhấn `start` chưa?
-4. Bundle ID đã chốt chưa (PMP cảnh báo không đổi bundle ID sau GĐ1)?
+- `PACK_THRESHOLD` và `PACK_MAX_AGE` ở Mục 6.6 là giá trị **đề xuất** của nhóm soạn
+  tài liệu, không phải số liệu đo được. Nếu nhóm đã có con số khác, dùng con số của nhóm.
+- Bundle ID đã chốt chưa (PMP cảnh báo không đổi bundle ID sau GĐ1)?
 
-### 16.3 Quy tắc viết code
+### 16.3 Trạng thái môi trường kiểm thử (đã xác nhận)
+
+- **Bot Telegram đã tạo và chat đích đã sẵn sàng; cả ba người nhận đã nhấn `start`.** Ca `TC-IO-NOT-01` không
+  còn rủi ro "chat chưa start bot" — nếu ca này thất bại thì là lỗi code, không phải lỗi
+  cấu hình. Ngược lại, nhánh xử lý lỗi `fatal_config` cho tình huống chat chưa start vẫn
+  phải hiện thực đủ, vì bản `prod` có thể gặp.
+
+### 16.4 Quy tắc viết code
 
 - **Tầng Domain thuần khiết.** Không import `dio`, không import `telegram_*`, không
   import `flutter_secure_storage` ở tầng Domain.
@@ -747,3 +759,91 @@ Cần được phản ánh trong code, trong comment, và trong tài liệu bàn
 Ngoài ra: kênh Telegram **không mở rộng** phạm vi dữ liệu ứng dụng tạo ra được. Danh
 sách "không thể làm" ở Mục 1 vẫn nguyên vẹn, và kênh gửi mới không được trở thành
 đường rò rỉ artefact điều tra (TC-IO-FOR-05).
+
+
+---
+
+## 18. NGƯỠNG ĐÃ CHỐT — DÙNG THẲNG, KHÔNG HỎI LẠI
+
+Các giá trị dưới đây chốt các điểm còn để trống trong SRS v4.0 Mục 5.3 và biến các
+tiêu chí định tính thành ngưỡng đo được. Hiện thực code theo đúng các ngưỡng này.
+
+### 18.1 Ba chỉ tiêu chất lượng chính (SRS v4.0 Mục 5.3)
+
+| Chỉ tiêu | Giá trị chốt | Cách đo |
+|----------|-------------|---------|
+| Thời gian kết quả đến Telegram | **≤ 10 giây** | Từ lúc gói kết quả hoàn tất đến khi tin nhắn đến chat đích, đo trên mạng ổn định, lặp 10 lần, lấy giá trị lớn nhất |
+| Tỷ lệ gửi thành công | **≥ 98%** | Tỷ lệ gói gửi thành công trên tổng gói đã thử, môi trường có mạng, tối thiểu 100 gói, loại trừ các ca ngắt mạng có chủ đích |
+| Số lần thử lại tối đa | **3 lần** (dev/staging), **5 lần** (prod) | Số lần thử trước khi đánh dấu thất bại và giữ trong hàng đợi |
+
+**Lý do chọn các ngưỡng này:**
+
+- **10 giây** đủ chỗ cho một gói phải chia nhiều phần hoặc mạng chập chờn nhẹ, mà vẫn
+  bắt được lỗi thật (dispatcher ngủ quên, gửi chặn UI). Ngưỡng chặt hơn — ví dụ 3 giây —
+  sẽ khiến ca kiểm thử đỏ vì lý do mạng, không phải vì lỗi code.
+- **98%** cho phép tối đa 2 gói hỏng trên 100 — đủ chỗ cho lỗi môi trường lẻ tẻ, nhưng
+  vẫn phát hiện được lỗi hệ thống. Kênh có hàng đợi bền và backoff đúng thì gần như
+  không được phép mất gói khi mạng bình thường.
+- **3/5 lần** khớp với bảng cấu hình đã có ở Mục 6.6. Với `BACKOFF_BASE` 1 giây và luỹ
+  tiến, prod dùng hết khoảng 2+4+8+16 = 30 giây trước khi đánh dấu thất bại.
+
+### 18.2 Mục tiêu tính đúng đắn — sai là mất dữ liệu hoặc lộ dữ liệu
+
+Ưu tiên cao nhất. Vi phạm một mục nào là hỏng cả kênh gửi.
+
+| Mục tiêu | Ngưỡng chốt | Truy vết |
+|----------|-------------|----------|
+| Gửi đúng đích | **100%** lần gửi khớp whitelist | NFR-IO-17 |
+| Bảo toàn gói | **0** gói mất khi đóng/mở app hoặc khi mất mạng | NFR-IO-15 |
+| Chia phần an toàn | **0** bản ghi bị cắt giữa | FR-IO-NOT-02 |
+| Tệp vượt giới hạn | **0** gói `oversize` bị bỏ im lặng — mọi lần bỏ phải có bản ghi lỗi trong `audit_log` | SDS Mục 8.5 |
+| Lỗi vĩnh viễn | **0** trường hợp gói lỗi vĩnh viễn chặn gói phía sau | FR-IO-NOT-04 |
+| Không tới Backend | **0** request tới `/api/agent/sync` từ nhánh iOS | FR-IO-NOT-01 |
+| Idempotency | **0** gói bị gửi trùng — chống bằng unique index `(sessionId, payloadKind)` | SDS Mục 8.3 |
+
+### 18.3 Mục tiêu bảo mật — sai là hỏng đồ án
+
+| Mục tiêu | Ngưỡng chốt |
+|----------|-------------|
+| Bí mật trong log | **0** lần xuất hiện token hoặc chat_id đầy đủ, kể cả log debug |
+| Bí mật trong repo | **0** — kiểm tra bằng script tự động, không bằng mắt |
+| chat_id trong `send_log` | Chỉ **4 ký tự cuối**, không bao giờ đầy đủ |
+| Bí mật trong thông báo lỗi | `send_log.lastError` phải đã lọc trước khi ghi |
+| Nới lỏng ATS | **0** ngoại lệ được thêm vào cấu hình ATS |
+| Artefact forensic trên kênh Telegram | **0** — mọi artefact điều tra nằm ngoài kênh gửi | 
+
+### 18.4 Mục tiêu hiệu quả vận hành
+
+| Mục tiêu | Ngưỡng chốt | Ghi chú |
+|----------|-------------|---------|
+| Gửi không chặn UI | Không chậm hơn **100 ms** so với khi không gửi | Cách đo cho TC-IO-NFR-14 |
+| Gộp gói dữ liệu luồng | **10 bản ghi / 60 giây** (dev, staging); **50 bản ghi / 300 giây** (prod) | Chốt theo SDS Mục 6.6 |
+| Tôn trọng giới hạn tần suất | Chờ đúng `retry_after`, sai số **±10%** | NFR-IO-16 |
+| Dọn tệp tạm | **0** tệp đóng gói còn lại sau khi gói gửi xong hoặc bị bỏ | NFR-IO-15 |
+| Số request tối đa cho một gói | Bằng số phần sau khi chia, **không gửi lại phần đã thành công** | Tránh gửi trùng khi chia phần |
+| Tài nguyên nền | Không tụt pin bất thường; bộ nhớ trong ngưỡng thiết bị | NFR-IO-02, NFR-IO-03 |
+
+**Về `PACK_THRESHOLD` / `PACK_MAX_AGE`:** đây là giá trị **đề xuất** của nhóm soạn tài
+liệu, không phải số liệu đo được. Giá trị 50 bản ghi cho prod là hợp lý vì vị trí sinh
+liên tục — gửi từng bản sẽ chạm giới hạn tần suất. Nếu nhóm có con số khác, dùng con số
+của nhóm và ghi lại lý do.
+
+### 18.5 Khối lượng kiểm chứng tối thiểu
+
+| Mục tiêu | Ngưỡng chốt |
+|----------|-------------|
+| Chạy lặp `TC-IO-NOT-01` | Tối thiểu **10 lần liên tiếp**, ghi lại phân bố thời gian |
+| Số gói trong ca đo tỷ lệ thành công | Tối thiểu **100 gói** để 98% có nghĩa thống kê |
+| Phủ ma trận truy vết | **0** yêu cầu không có ca kiểm chứng |
+| Trạng thái môi trường | Bot `@KML_IOs_bot` đã tạo; ba chat đích đã cấu hình; cả ba người nhận đã nhấn `start` |
+
+### 18.6 Thứ tự ưu tiên khi phải đánh đổi
+
+Khi hai mục tiêu xung đột, thứ tự này quyết định — mục trên thắng mục dưới:
+
+1. **Bảo mật bí mật và đúng đích gửi** — không đánh đổi với bất kỳ mục nào.
+2. **Bảo toàn dữ liệu** — thà gửi chậm còn hơn mất gói.
+3. **Tính đúng đắn của nội dung** — không cắt giữa bản ghi, không gửi thiếu phần.
+4. **Thời gian gửi** — trong ngưỡng 10 giây.
+5. **Hiệu quả tài nguyên** — pin, bộ nhớ, số request.
+6. **Tính tiện lợi của giao diện** — sau cùng.

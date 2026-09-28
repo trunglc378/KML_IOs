@@ -1,0 +1,16 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # Tầng Domain phải thuần khiết (TC-IO-NFR-11).
+    # Việc cưỡng chế import được thực hiện bằng script scripts/check_domain_purity.dart
+    # và bằng ca kiểm thử test/architecture/domain_purity_test.dart.
+    avoid_print: true
+    prefer_const_constructors: true
+    prefer_final_locals: true
+    always_declare_return_types: true
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "build/**"

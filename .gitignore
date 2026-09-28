@@ -1,0 +1,54 @@
+# Flutter / Dart
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+*.iml
+.idea/
+.vscode/
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/App.framework
+ios/Flutter/ephemeral/
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+
+# BÍ MẬT — không bao giờ commit (ràng buộc Mục 1.4 / NFR-IO-13)
+.env
+.env.*
+!.env.example
+*.secrets.*
+*.secrets
+config/local*.json
+config/*.local.dart
+**/secrets/
+ios/Runner/GoogleService-Info.plist
+ios/Runner/*.mobileprovision
+
+# CSDL local + tệp tạm
+*.db
+*.sqlite
+*.sqlite3
+*.tmp
+
+# Hệ điều hành
+.DS_Store
+Thumbs.db
+
+# Tep tam khi kiem tra tinh (analyze/test output)
+analyze_out.txt
+an*.txt
+t*.txt
+_inv.txt
+
+# Tep thong tin bot chua token THAT - KHONG BAO GIO push
+doc/Telegram_Infor.txt
+Telegram_Infor.txt
+*Telegram_Infor*
+an*.txt
+t*.txt

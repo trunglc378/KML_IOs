@@ -1,0 +1,55 @@
+﻿name: kml_ios
+description: "KML-iOS v4.0 — Ứng dụng thu thập dữ liệu iOS, gửi kết quả qua Telegram Bot."
+publish_to: "none"
+version: 4.0.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management + điều hướng (SDS v4.0 Mục 3)
+  flutter_riverpod: ^2.5.1
+  go_router: ^14.2.0
+
+  # CSDL local + cấu hình nhẹ (Mục 4)
+  sqflite: ^2.3.3
+  path: ^1.9.0
+  shared_preferences: ^2.2.3
+
+  # HTTP — dùng lại dio, KHÔNG thêm package HTTP mới (Mục 4)
+  dio: ^5.5.0
+  # BẮT BUỘC: gửi tệp dùng dio + FormData, không cần package multipart riêng.
+  # Dio đã bao gồm FormData/MultipartFile.
+
+  # Lưu bí mật — Keychain của chính app (NFR-IO-05)
+  flutter_secure_storage: ^9.2.2
+
+  # Quyền + định vị
+  permission_handler: ^11.3.1
+  geolocator: ^12.0.0
+
+  # Tác vụ nền — có giới hạn bởi iOS (Mục 10)
+  workmanager: ^0.5.2
+
+  # Tiện ích
+  path_provider: ^2.1.4
+  intl: ^0.19.0
+  crypto: ^3.0.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  # Chi dung cho TEST: cho phep mo SQLite in-memory tren may khong phai thiet bi.
+  sqflite_common_ffi: ^2.3.3
+
+flutter:
+  uses-material-design: true
+
+# LƯU Ý BẢO MẬT (ràng buộc bất khả xâm phạm Mục 1.4 / 1.5):
+# - Bot token và chat_id KHÔNG BAO GIỜ hard-code trong file này.
+# - Chúng được nạp lúc build qua --dart-define và lưu vào flutter_secure_storage.
