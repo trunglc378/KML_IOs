@@ -1,2 +1,0 @@
-Đã quét 36 file văn bản.
-[ĐẠT] Không tìm thấy bí mật nào trong repo (TC-IO-SEC-08).
