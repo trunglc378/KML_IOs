@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants/telegram_runtime_config.dart';
@@ -170,7 +170,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         }
         // KHONG hien thi day du - chi 4 ky tu cuoi.
         return ListTile(
-          title: Text('Chat id: ' + TokenStore.maskChatId(id)),
+          title: Text('Chat id: ${TokenStore.maskChatId(id)}'),
         );
       },
     );

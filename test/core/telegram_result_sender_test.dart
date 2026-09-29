@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
@@ -80,7 +80,7 @@ class FakeTokenStore implements TokenStore {
   Future<bool> hasCredentials() async => token != null;
 }
 
-const String kValidToken = '0000000000' + ':' + 'FAKE_TOKEN_FOR_TEST_ONLY_NOT_REAL';
+const String kValidToken = '0000000000:FAKE_TOKEN_FOR_TEST_ONLY_NOT_REAL';
 const String kDevChatId = '5887530234';
 const String kForeignChatId = '-9999999999';
 
@@ -154,7 +154,7 @@ void main() {
 
     test('6. van ban dai (>4096) -> chia phan, sendMessage nhieu lan', () async {
       final List<String> big = List<String>.generate(
-        400, (int i) => 'ban-ghi-' + i.toString());
+        400, (int i) => 'ban-ghi-$i');
       final r = makeSender();
       await callSend(r.$1, records: big);
       expect(r.$2.lastMethod, 'sendMessage');

@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 import 'dart:typed_data';  
   
 import 'package:dio/dio.dart';  
@@ -44,7 +44,7 @@ class FakeAdapter implements HttpClientAdapter {
 Future<(TelegramClient, FakeAdapter)> makeClient(  
   int statusCode,  
   Object body, {  
-  String? token = '0000000000' + ':' + 'FAKETOKENFORTESTONLYNOTREAL',  
+  String? token = '0000000000:FAKETOKENFORTESTONLYNOTREAL',  
 }) async {  
   final Dio dio = TelegramClient.buildDio();  
   final FakeAdapter ad = FakeAdapter(statusCode, body);  
@@ -151,9 +151,9 @@ void main() {
     });  
   
     test('11. safeUrl che token trong log', () async {  
-      final String tok = '0000000000' + ':' + 'FAKETOKENFORTESTONLYNOTREAL';
+      const String tok = '0000000000:FAKETOKENFORTESTONLYNOTREAL';
       final String u = TelegramClient.safeUrl(  
-        'https://api.telegram.org/bot' + tok + '/sendMessage');  
+        'https://api.telegram.org/bot$tok/sendMessage');  
       expect(u.contains('FAKETOKENFORTESTONLYNOTREAL'), isFalse);
       expect(u.contains('0000000000:***'), isTrue);
     });  

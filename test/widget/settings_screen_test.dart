@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -81,8 +81,7 @@ void main() {
 
   testWidgets('6. KHONG co token nao hien thi tren man hinh', (WidgetTester t) async {
     // Token gia - neu man hinh hien thi token, ca nay se do.
-    const String fakeToken =
-        '0000000000' + ':' + 'FAKETOKENFORTESTONLYNOTREAL';
+    const String fakeToken = '0000000000:FAKETOKENFORTESTONLYNOTREAL';
     await t.pumpWidget(_wrap(BotConfigStatus.configured, null));
     await t.pumpAndSettle();
     expect(find.text(fakeToken), findsNothing);

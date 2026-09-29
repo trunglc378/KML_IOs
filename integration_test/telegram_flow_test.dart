@@ -1,4 +1,4 @@
-﻿// Integration test - KML-iOS v4.0 kenh gui Telegram.  
+// Integration test - KML-iOS v4.0 kenh gui Telegram.  
 //  
 // Bon nhom ca theo KML-TEST-001 v4.0.  
 //  
@@ -169,9 +169,9 @@ void main() {
         recordCount: 1,  
       );  
       final FakeSender fs = FakeSender([  
-        SendResult(  
+        const SendResult(  
           status: SendStatus.retryable,  
-          retryAfter: const Duration(seconds: 7),  
+          retryAfter: Duration(seconds: 7),  
           description: 'bi gioi han tan suat',  
         ),  
       ]);  

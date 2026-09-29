@@ -30,7 +30,7 @@ class SecretRedactor {
     if (chatId == null || chatId.isEmpty) return '<chưa cấu hình>';
     final String trimmed = chatId.trim();
     if (trimmed.length <= keep) return mask;
-    return '${mask}${trimmed.substring(trimmed.length - keep)}';
+    return '$mask${trimmed.substring(trimmed.length - keep)}';
   }
 
   /// Lấy [keep] ký tự cuối của chat_id để ghi vào `send_log.chatIdSuffix`.

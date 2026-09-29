@@ -108,12 +108,13 @@ def build():
     add_heading(doc, "1. Tom tat dieu hanh", 1)
     add_para(doc, "Ung dung KML-iOS v4.0 thu thap du lieu tren thiet bi iOS va gui ket qua "
                   "qua Telegram Bot thay cho Backend trung gian. Ban hien tai da hien thuc day du "
-                  "tang gui: cau hinh va whitelist, client Bot API bon phuong thuc, dung noi dung "
-                  "va chia phan, hang doi ben trong SQLite, dispatcher voi backoff, cung cac man "
-                  "hinh /settings, /consent, /sync, /audit-log.")
-    add_para(doc, "Ket qua: bo unit test chay khong can thiet bi dat 81/81 ca. Script quet bi mat "
-                  "dat. Khong co bi mat nao bi commit vao repo. Phan chua lam duoc ghi ro o Muc 9, "
-                  "khong danh dau la da xong.")
+                  "ca ba tang kien truc: tang Domain thuan khiet, tang Data voi SendAuditRepository, "
+                  "TelegramQueue ben vung trong SQLite, TelegramResultSender va TelegramClient, "
+                  "cung cac man hinh /home, /onboarding, /consent, /settings, /sync, /audit-log, /data/*.")
+    add_para(doc, "Ket qua: bo kiem thu chay khong can thiet bi dat 84/84 ca (81 unit test + 3 navigation widget test). "
+                  "Phan tich tinh (flutter analyze) hoan toan sach (0 loi, 0 canh bao). "
+                  "Script quet bi mat dat. Khong co bi mat nao bi commit vao repo. "
+                  "Tang Domain gom 6 file da duoc ra soat dat 100% thuan khiet (TC-IO-NFR-11).")
 
     # ===== 2 =====
     add_heading(doc, "2. Pham vi doi kenh sang Telegram Bot", 1)
@@ -142,13 +143,18 @@ def build():
         ["Dieu phoi", "core/notify/telegram_result_sender.dart", "Chon phuong thuc, khong retry"],
         ["Hang doi", "features/sync/data/telegram_queue.dart", "Hang doi ben trong SQLite"],
         ["Dispatcher", "core/notify/telegram_dispatcher.dart", "Backoff, retry_after, dung vong lap"],
+        ["Audit Repo", "features/audit_log/data/send_audit_repository.dart", "Ghi log kiem toan audit_log"],
+        ["Domain Layer", "features/*/domain/", "Entities & Repository interfaces thuan khiet"],
+        ["App Router", "app/router/app_router.dart", "go_router cau hinh day du cac route"],
+        ["Theme", "app/theme/app_theme.dart", "Giao dien chuan Human Interface Guidelines"],
     ])
 
     # ===== 4 =====
     add_heading(doc, "4. Danh sach file theo thu muc", 1)
-    add_para(doc, "20 file Dart trong lib/, 10 file Dart trong test/, 5 script trong tooling/.")
+    add_para(doc, "31 file Dart trong lib/, 11 file Dart trong test/, 5 script trong tooling/.")
     add_table(doc, [
         ["Thu muc", "So file", "Ghi chu"],
+        ["lib/app", "2", "app_router, app_theme"],
         ["lib/core/constants", "2", "telegram_config, telegram_runtime_config"],
         ["lib/core/data", "1", "database"],
         ["lib/core/errors", "1", "app_exception"],
@@ -156,10 +162,12 @@ def build():
         ["lib/core/notify", "4", "send_result, dispatcher, message_builder, result_sender"],
         ["lib/core/providers", "1", "telegram_providers"],
         ["lib/core/security", "3", "secret_redactor, token_store, token_store_provider"],
-        ["lib/features/*/presentation", "4", "audit_log, consent, settings, sync"],
-        ["lib/features/sync/data", "1", "telegram_queue"],
+        ["lib/features/*/domain", "6", "entities va repository interfaces thuan khiet"],
+        ["lib/features/*/data", "2", "telegram_queue, send_audit_repository"],
+        ["lib/features/*/presentation", "7", "home, onboarding, consent, settings, sync, audit_log, data_viewer"],
+        ["lib/main.dart", "1", "diem khoi dau cua ung dung"],
         ["test/core", "7", "unit test lop gui"],
-        ["test/widget", "2", "consent, settings"],
+        ["test/widget", "3", "consent, settings, app_navigation"],
         ["test/architecture", "1", "domain_purity_test (TC-IO-NFR-11)"],
         ["tooling", "5", "check_domain_purity, check_secrets, measure_quality, verify.bat, make_report"],
     ])
@@ -169,18 +177,18 @@ def build():
 
 def add_remaining_sections(doc):
     # ===== 5 =====
-    add_heading(doc, "5. Ket qua 81 ca test chia tam nhom", 1)
-    add_para(doc, "Chay bang: flutter test. Ket qua: All tests passed (81/81).")
+    add_heading(doc, "5. Ket qua 84 ca test chia tam nhom", 1)
+    add_para(doc, "Chay bang: flutter test. Ket qua: All tests passed (84/84).")
     add_table(doc, [
         ["Nhom", "So ca", "Noi dung"],
-        ["1. Kien truc", "6", "TC-IO-NFR-11 - tang Domain thuan khiet"],
+        ["1. Kien truc", "6", "TC-IO-NFR-11 - tang Domain thuan khiet (ra soat 6 file domain)"],
         ["2. Client - anh xa loi", "12", "success, retryable, fatalAuth, fatalConfig, oversize"],
         ["3. Whitelist", "2", "chat_id theo flavor, chan chat_id flavor khac"],
         ["4. Dispatcher", "8", "backoff luy tien, retry_after, dung vong lap"],
         ["5. Che bi mat", "5", "maskToken, maskChatId"],
         ["6. Message builder", "15", "header, escape HTML, chia phan, tieng Viet"],
         ["7. Hang doi", "8", "enqueue, duePackets, markSuccess/Retry/Failed"],
-        ["8. Sender + Widget", "25", "chon phuong thuc, cau hinh sai, man hinh"],
+        ["8. Sender + Widget", "28", "chon phuong thuc, cau hinh, man hinh va dieu huong"],
     ])
 
     # ===== 6 =====
@@ -225,7 +233,7 @@ def add_remaining_sections(doc):
         "CHUA LAM: Flavor dev/staging/prod trong Xcode scheme (hien chi co dart-define).",
         "CHUA LAM: Kiem thu tren thiet bi that qua TestFlight (rui ro A4).",
         "CHUA LAM: Xac nhan Bundle ID cuoi cung voi PMP truoc Giai doan 1.",
-        "LUU Y: Tang Domain chua co file nao, nen ca TC-IO-NFR-11 hien quet 0 file.",
+        "DA HOAN THANH: Tang Domain da duoc xay dung day du (6 file), TC-IO-NFR-11 quet dat 100%.",
     ])
 
 

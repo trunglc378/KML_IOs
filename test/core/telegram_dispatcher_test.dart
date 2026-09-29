@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -216,7 +216,7 @@ void main() {
 
     test('11. success -> xoa tep tam tai payloadPath', () async {
       final Directory dir = Directory.systemTemp.createTempSync('kml8_');
-      final File f = File(dir.path + Platform.pathSeparator + 'p.txt');
+      final File f = File('${dir.path}${Platform.pathSeparator}p.txt');
       f.writeAsStringSync('lat=1');
       expect(f.existsSync(), isTrue);
       fq.packets.add(QueuedPacketRef(

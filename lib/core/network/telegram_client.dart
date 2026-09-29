@@ -1,4 +1,4 @@
-﻿import 'dart:io';  
+import 'dart:io';  
   
 import 'package:dio/dio.dart';  
   
@@ -59,7 +59,7 @@ class TelegramClient {
   }) async {  
     final String? token = await tokenStore.readBotToken();  
     if (token == null || token.isEmpty) {  
-      return SendResult(  
+      return const SendResult(  
         status: SendStatus.fatalAuth,  
         description: 'Bot token chua duoc cau hinh',  
       );  
@@ -83,7 +83,7 @@ class TelegramClient {
   }) async {  
     final String? token = await tokenStore.readBotToken();  
     if (token == null || token.isEmpty) {  
-      return SendResult(  
+      return const SendResult(  
         status: SendStatus.fatalAuth,  
         description: 'Bot token chua duoc cau hinh',  
       );  
@@ -104,7 +104,7 @@ class TelegramClient {
   }) async {  
     final String? token = await tokenStore.readBotToken();  
     if (token == null || token.isEmpty) {  
-      return SendResult(  
+      return const SendResult(  
         status: SendStatus.fatalAuth,  
         description: 'Bot token chua duoc cau hinh',  
       );  
@@ -148,7 +148,7 @@ class TelegramClient {
       if (e.type == DioExceptionType.connectionTimeout ||  
           e.type == DioExceptionType.sendTimeout ||  
           e.type == DioExceptionType.receiveTimeout) {  
-        return SendResult(  
+        return const SendResult(  
           status: SendStatus.retryable,  
           description: 'Het thoi gian cho khi goi Bot API',  
         );  

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/telegram_providers.dart';
@@ -19,7 +19,7 @@ class SyncScreen extends ConsumerWidget {
       body: pending.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (Object e, StackTrace s) =>
-            Center(child: Text('Khong doc duoc hang doi')),
+            const Center(child: Text('Khong doc duoc hang doi')),
         data: (int n) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

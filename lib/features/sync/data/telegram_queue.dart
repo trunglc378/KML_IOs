@@ -1,4 +1,4 @@
-﻿import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../../../core/data/database.dart';
 import '../../../core/notify/telegram_dispatcher.dart';
@@ -62,6 +62,7 @@ class TelegramQueue implements PacketQueue {
 
   /// Goi den han thu: attempts < maxRetry VA nextAttemptAt <= now
   /// VA chua bi danh dau loi vinh vien (terminal = 0).
+  @override
   Future<List<QueuedPacket>> duePackets({
     required DateTime now,
     required int maxRetry,
@@ -85,12 +86,14 @@ class TelegramQueue implements PacketQueue {
   }
 
   /// Goi gui thanh cong: xoa khoi queue.
+  @override
   Future<void> markSuccess(int id) async {
     await db.delete(DbTables.telegramQueue,
         where: 'id = ?', whereArgs: <Object?>[id]);
   }
 
   /// Goi thu lai: tang attempts, dat nextAttemptAt, luu lastError DA LOC.
+  @override
   Future<void> markRetry(
     int id, {
     required DateTime nextAttemptAt,
@@ -120,6 +123,7 @@ class TelegramQueue implements PacketQueue {
 
   /// Loi vinh vien: danh dau terminal = 1 de goi ra khoi vong thu,
   /// KHONG chan cac goi phia sau (FR-IO-NOT-04 tieu chi 4).
+  @override
   Future<void> markFailed(int id, {required String lastError}) async {
     await db.update(
       DbTables.telegramQueue,
@@ -135,8 +139,7 @@ class TelegramQueue implements PacketQueue {
   /// So goi dang cho gui (chua terminal).
   Future<int> countPending() async {
     final List<Map<String, Object?>> r = await db.rawQuery(
-      'SELECT COUNT(*) AS c FROM ' + DbTables.telegramQueue +
-      ' WHERE terminal = 0',
+      'SELECT COUNT(*) AS c FROM ${DbTables.telegramQueue} WHERE terminal = 0',
     );
     return (r.first['c'] as int?) ?? 0;
   }

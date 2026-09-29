@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/telegram_providers.dart';
@@ -18,7 +18,7 @@ class AuditLogScreen extends ConsumerWidget {
       body: rows.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (Object e, StackTrace s) =>
-            Center(child: Text('Khong doc duoc nhat ky')),
+            const Center(child: Text('Khong doc duoc nhat ky')),
         data: (List<SendLogRow> data) => _buildTable(context, data),
       ),
     );
@@ -38,9 +38,7 @@ class AuditLogScreen extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.all(12),
           child: Text(
-            'Tong: ' + rows.length.toString() +
-                '  ·  Thanh cong: ' + ok.toString() +
-                '  ·  That bai: ' + fail.toString(),
+            'Tong: ${rows.length}  ·  Thanh cong: $ok  ·  That bai: $fail',
           ),
         ),
         const Divider(height: 1),

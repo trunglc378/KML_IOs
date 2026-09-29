@@ -1,4 +1,4 @@
-﻿// Script kiểm tra bí mật trong repo — dùng cho TC-IO-SEC-08 / TC-IO-NFR-13.
+// Script kiểm tra bí mật trong repo — dùng cho TC-IO-SEC-08 / TC-IO-NFR-13.
 //
 // Chạy: dart run tooling/check_secrets.dart
 // Thoát mã 0 nếu sạch; thoát mã 1 nếu phát hiện bí mật.
@@ -10,7 +10,7 @@
 //   - doc/             (tài liệu dự án, có thể chứa ví dụ minh hoạ)
 //
 // QUAN TRỌNG: script này KHÔNG BAO GIỜ in ra giá trị bí mật tìm được.
-// Nó chỉ in tên file, số dòng và loại bí mật — đúng tinh thần NFR-IO-13.
+// ignore_for_file: avoid_print
 import 'dart:io';
 
 /// Một mẫu nhận dạng bí mật.

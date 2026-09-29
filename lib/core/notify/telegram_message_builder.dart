@@ -1,4 +1,4 @@
-﻿  
+  
 /// Dung noi dung tin nhan va chia phan.  
 ///  
 /// THUAN HAM: khong goi mang, khong doc Keychain, khong cham SQLite,  
@@ -49,18 +49,16 @@ class TelegramMessageBuilder {
     final StringBuffer b = StringBuffer();  
   
     // 1. Dong dinh danh. platform luon la ios theo quy tac 6.2 so 1.  
-    b.writeln('KML-iOS · platform=ios · deviceId=' + escapeHtml(deviceId));  
-    b.writeln('Phien: ' + escapeHtml(sessionId));  
+    b.writeln('KML-iOS · platform=ios · deviceId=${escapeHtml(deviceId)}');  
+    b.writeln('Phien: ${escapeHtml(sessionId)}');  
   
     // 2. Dong thoi gian - ISO 8601 UTC.  
-    b.writeln('Thu thap: ' + isoUtc(collectedAt) + ' · Gui: ' + isoUtc(sentAt));  
+    b.writeln('Thu thap: ${isoUtc(collectedAt)} · Gui: ${isoUtc(sentAt)}');  
   
     // 3. Dong tong quan - chi so phan CHI ghi khi biet ca partIndex va partTotal.  
-    String overview = 'Loai: ' + escapeHtml(payloadKind) +  
-        ' · So ban ghi: ' + recordCount.toString();  
+    String overview = 'Loai: ${escapeHtml(payloadKind)} · So ban ghi: $recordCount';  
     if (partIndex != null && partTotal != null && partTotal > 1) {  
-      overview = overview + ' · [Phan ' + partIndex.toString() + '/' +  
-          partTotal.toString() + ']';  
+      overview = '$overview · [Phan $partIndex/$partTotal]';  
     }  
     b.writeln(overview);  
   
@@ -155,6 +153,6 @@ class TelegramMessageBuilder {
     final String s = dt.toUtc().toIso8601String();  
     final int dot = s.indexOf('.');  
     final String base = dot >= 0 ? s.substring(0, dot) : s;  
-    return base.endsWith('Z') ? base : base + 'Z';  
+    return base.endsWith('Z') ? base : '${base}Z';  
   }  
 }  

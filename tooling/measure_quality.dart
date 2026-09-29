@@ -8,6 +8,7 @@
 //   - Chay RIENG, khong cung luc voi test khac.  
 //  
 // Thoat ma 0 neu ca ba DAT, 1 neu khong, 2 neu thieu cau hinh.  
+// ignore_for_file: avoid_print, prefer_interpolation_to_compose_strings
 import 'dart:convert';  
 import 'dart:io';  
   

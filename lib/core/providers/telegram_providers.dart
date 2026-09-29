@@ -1,4 +1,4 @@
-﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../constants/telegram_runtime_config.dart';
@@ -60,8 +60,7 @@ final sendQueueProvider = StreamProvider<int>((Ref ref) async* {
 
 Future<int> _countPending(Database db) async {
   final List<Map<String, Object?>> r = await db.rawQuery(
-    'SELECT COUNT(*) AS c FROM ' + DbTables.telegramQueue +
-    ' WHERE terminal = 0',
+    'SELECT COUNT(*) AS c FROM ${DbTables.telegramQueue} WHERE terminal = 0',
   );
   return (r.first['c'] as int?) ?? 0;
 }
