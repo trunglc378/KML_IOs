@@ -1,4 +1,4 @@
-﻿import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'package:kml_ios/core/data/database.dart';
@@ -98,5 +98,21 @@ void main() {
     expect(await q.countPending(), 2);
     await q.markSuccess(1);
     expect(await q.countPending(), 1);
+  });
+
+  test('9. enqueue kem deviceId -> duePackets tra ve dung deviceId', () async {
+    await q.enqueue(
+      sessionId: 'S9',
+      payloadKind: 'device_info',
+      payloadPath: '/tmp/k',
+      recordCount: 1,
+      deviceId: 'device-xyz-999',
+    );
+    final List<QueuedPacket> r = await q.duePackets(
+      now: DateTime.now().toUtc(),
+      maxRetry: 5,
+    );
+    expect(r.length, 1);
+    expect(r.first.deviceId, 'device-xyz-999');
   });
 }

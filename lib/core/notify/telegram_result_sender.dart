@@ -100,7 +100,7 @@ class TelegramResultSender {
       recordCount: records.length,
     );
     // header ket thuc bang dai phan cach + \\n (writeln), nen than khong dinh.
-    final String full = header + records.join('\\n');
+    final String full = header + records.join('\n');
 
     // Van ban ngan: mot tin nhan. Van ban dai: chia phan theo ranh gioi ban ghi.
     if (full.length <= TelegramConfig.maxMessageLength) {

@@ -39,8 +39,8 @@ Tài liệu này cung cấp hướng dẫn chi tiết dành cho DevOps, Kỹ sư
 
 ### Các biến cấu hình chính:
 - `FLAVOR`: `dev`, `staging`, hoặc `prod`.
-- `TELEGRAM_BOT_TOKEN`: Mã token bot Telegram (ví dụ: `8920168927:AAEOJV3AERdnNDfyZz5X7vY1e85xaVlP5QI`).
-- `TELEGRAM_CHAT_ID`: ID người nhận hoặc ID nhóm Telegram (chú ý: Chat ID nhóm là số âm, ví dụ Staging: `-5152160106`, Production: `-5022357153`).
+- `TELEGRAM_BOT_TOKEN`: Mã token bot Telegram (ví dụ: `1234567890:ABCdefGHIjklMNOpqrsTUVwxyz`).
+- `TELEGRAM_CHAT_ID`: ID người nhận hoặc ID nhóm Telegram (chú ý: Chat ID nhóm là số âm, ví dụ Staging: `-100123456789`, Production: `-100987654321`).
 
 ### Chuẩn bị file cấu hình cục bộ (tùy chọn):
 Sao chép mẫu cấu hình từ các file ví dụ:
@@ -85,14 +85,14 @@ Từ thư mục gốc dự án, thực thi lệnh Flutter run kèm theo biến c
 # Build & Run môi trường Dev:
 flutter run --release -d <DEVICE_ID> \
   --dart-define=FLAVOR=dev \
-  --dart-define=TELEGRAM_BOT_TOKEN="8920168927:AAEOJV3AERdnNDfyZz5X7vY1e85xaVlP5QI" \
-  --dart-define=TELEGRAM_CHAT_ID="5887530234"
+  --dart-define=TELEGRAM_BOT_TOKEN="YOUR_BOT_TOKEN" \
+  --dart-define=TELEGRAM_CHAT_ID="YOUR_DEV_CHAT_ID"
 
 # Hoặc môi trường Staging (Supergroup):
 flutter run --release -d <DEVICE_ID> \
   --dart-define=FLAVOR=staging \
-  --dart-define=TELEGRAM_BOT_TOKEN="8920168927:AAEOJV3AERdnNDfyZz5X7vY1e85xaVlP5QI" \
-  --dart-define=TELEGRAM_CHAT_ID="-5152160106"
+  --dart-define=TELEGRAM_BOT_TOKEN="YOUR_BOT_TOKEN" \
+  --dart-define=TELEGRAM_CHAT_ID="-100XXXXXXXXXX"
 ```
 
 ### Bước A4: Xác nhận Trust Profile trên iPhone
@@ -124,8 +124,8 @@ Trong trường hợp máy Mac và iPhone không có kết nối cáp vật lý 
 6. Thực hiện lệnh build và deploy không dây tương tự như kịch bản A:
    ```bash
    flutter run -d <WIRELESS_DEVICE_ID> --dart-define=FLAVOR=staging \
-     --dart-define=TELEGRAM_BOT_TOKEN="8920168927:AAEOJV3AERdnNDfyZz5X7vY1e85xaVlP5QI" \
-     --dart-define=TELEGRAM_CHAT_ID="-5152160106"
+     --dart-define=TELEGRAM_BOT_TOKEN="YOUR_BOT_TOKEN" \
+     --dart-define=TELEGRAM_CHAT_ID="-100XXXXXXXXXX"
    ```
 
 ---
@@ -138,8 +138,8 @@ Trong trường hợp máy Mac và iPhone không có kết nối cáp vật lý 
    ```bash
    flutter build ipa --release \
      --dart-define=FLAVOR=staging \
-     --dart-define=TELEGRAM_BOT_TOKEN="8920168927:AAEOJV3AERdnNDfyZz5X7vY1e85xaVlP5QI" \
-     --dart-define=TELEGRAM_CHAT_ID="-5152160106" \
+     --dart-define=TELEGRAM_BOT_TOKEN="YOUR_BOT_TOKEN" \
+     --dart-define=TELEGRAM_CHAT_ID="-100XXXXXXXXXX" \
      --export-options-plist=ios/ExportOptions.plist
    ```
 2. **Tải lên TestFlight bằng altool/xcrun:**

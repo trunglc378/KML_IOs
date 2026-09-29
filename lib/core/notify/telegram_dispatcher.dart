@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 
 import 'package:sqflite/sqflite.dart';
 
@@ -39,15 +39,21 @@ class TelegramDispatcher {
     required TelegramResultSender sender,
     required Database db,
     required String Function() readChatId,
+    /// GAP-CONTRACT-002 FIX: deviceId duoc truyen tu ngoai, KHONG hardcode.
+    /// Caller lay gia tri tu UIDevice.identifierForVendor (MethodChannel) hoac
+    /// tao UUID ngau nhien lan dau roi luu vao Keychain.
+    required String deviceId,
   })  : _queue = queue,
         _sender = sender,
         _db = db,
-        _readChatId = readChatId;
+        _readChatId = readChatId,
+        _deviceId = deviceId;
 
   final PacketQueue _queue;
   final TelegramResultSender _sender;
   final Database _db;
   final String Function() _readChatId;
+  final String _deviceId;
 
   /// Backoff luy tien: backoffBase * 2^(attempts-1).
   /// Lan 1 -> 1x, lan 2 -> 2x, lan 3 -> 4x, lan 4 -> 8x.
@@ -96,7 +102,7 @@ class TelegramDispatcher {
         p.payloadKind == 'photo' || p.payloadKind == 'screen';
     final SendResult r = await _sender.send(
       sessionId: p.sessionId,
-      deviceId: 'ios-dev-001',
+      deviceId: p.deviceId ?? _deviceId, // GAP-CONTRACT-002/003: uu tien deviceId tu packet neu co, fallback _deviceId
       payloadKind: p.payloadKind,
       records: records,
       filePath: isImage ? p.payloadPath : null,
@@ -210,6 +216,6 @@ class SendOutcomeMapper {
   static const String retryable = 'failed_network';
   static const String fatal = 'failed_auth';
   static const String blocked = 'blocked_whitelist';
-  static const String oversize = 'failed_server';
-  static const String exhausted = 'failed_server';
+  static const String oversize = 'failed_oversize';
+  static const String exhausted = 'failed_exhausted';
 }

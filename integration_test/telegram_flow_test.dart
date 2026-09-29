@@ -129,6 +129,7 @@ void main() {
         sender: fs,  
         db: db,  
         readChatId: () => '5887530234',  
+        deviceId: 'test-device-flow',  
       );  
       await d.runOnce(now: now);  
   
@@ -180,6 +181,7 @@ void main() {
         sender: fs,  
         db: db,  
         readChatId: () => '5887530234',  
+        deviceId: 'test-device-flow',  
       );  
       await d.runOnce(now: now);  
   

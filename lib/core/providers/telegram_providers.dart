@@ -5,6 +5,8 @@ import '../constants/telegram_runtime_config.dart';
 import '../constants/telegram_config.dart';
 import '../data/database.dart';
 import '../network/telegram_client.dart';
+import '../../features/sync/data/telegram_queue.dart';
+import '../notify/telegram_dispatcher.dart';
 import '../notify/telegram_message_builder.dart';
 import '../notify/telegram_result_sender.dart';
 import '../security/token_store.dart';
@@ -46,6 +48,28 @@ final resultSenderProvider = Provider<TelegramResultSender>((Ref ref) {
     client: ref.watch(telegramClientProvider),
     tokenStore: ref.watch(tokenStoreProvider),
     builder: const TelegramMessageBuilder(),
+  );
+});
+
+/// Provider quan ly TelegramQueue.
+final telegramQueueProvider = FutureProvider<TelegramQueue>((Ref ref) async {
+  final Database db = await ref.watch(databaseProvider.future);
+  return TelegramQueue(db);
+});
+
+/// Provider quan ly TelegramDispatcher.
+final telegramDispatcherProvider = FutureProvider<TelegramDispatcher>((Ref ref) async {
+  final Database db = await ref.watch(databaseProvider.future);
+  final TelegramQueue queue = await ref.watch(telegramQueueProvider.future);
+  final TelegramResultSender sender = ref.watch(resultSenderProvider);
+  final TokenStore tokenStore = ref.watch(tokenStoreProvider);
+
+  return TelegramDispatcher(
+    queue: queue,
+    sender: sender,
+    db: db,
+    readChatId: () => tokenStore.cachedChatId ?? '',
+    deviceId: 'unknown',
   );
 });
 

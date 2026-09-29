@@ -13,7 +13,7 @@ Kênh truyền dữ liệu chính thức của hệ thống **KML_iOS v4.0** s�
 - **Tên Bot:** `KML_IOs`
 - **Username:** `@KML_IOs_bot`
 - **ID Bot:** `8920168927`
-- **Token Format:** `<bot_id>:<secret_hash>` (ví dụ: `8920168927:AAEOJV3AERdnNDfyZz5X7vY1e85xaVlP5QI`)
+- **Token Format:** `<bot_id>:<secret_hash>` (ví dụ: `1234567890:ABCdefGHIjklMNOpqrsTUVwxyz`)
 
 ### 1.2. Danh sách Whitelist Chat ID theo Môi trường (Flavor)
 Hệ thống KML_iOS áp dụng cơ chế **Whitelist cưỡng bức (Forced Whitelist)** ở tầng `TelegramConfig` (SDS v4.0 Mục 11.2.1). Bất kỳ nỗ lực gửi tin nhắn đến Chat ID nằm ngoài whitelist của môi trường đang chạy sẽ bị **chặn ngay lập tức (blocked)** trước khi gửi request ra mạng, đảm bảo không rò rỉ dữ liệu nhạy cảm.
@@ -36,8 +36,8 @@ Theo yêu cầu nghiêm ngặt từ quy chuẩn kiến trúc và kiểm thử an
 1. **Không commit secret:** Tuyệt đối không lưu Bot Token hoặc Chat ID trong kho Git mã nguồn công khai hoặc các file cấu hình theo dõi.
 2. **Không log token nguyên vẹn:** Trong nhật ký log hoặc màn hình UI, chỉ được phép hiển thị token dạng che mờ (masking), ví dụ:
    ```text
-   8920168927:AAEOJV3AERdnNDfyZz5X7vY1e85xaVlP5QI 
-   --> 8920168927:AAEOJV3A...lP5QI
+   1234567890:ABCdefGHIjklMNOpqrsTUVwxyz 
+   --> 1234567890:ABCdefGH...UVwxyz
    ```
 3. **Thứ tự ưu tiên cấu hình (Precedence Order):**
    1. Keychain / Secure Storage lưu trên thiết bị (ưu tiên cao nhất nếu người dùng cấu hình cục bộ).

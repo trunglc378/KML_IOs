@@ -45,6 +45,7 @@ class FakeQueue implements PacketQueue {
 /// Sender gia: dem so lan goi, tra ket qua theo hang doi.
 class FakeSender implements TelegramResultSender {
   int callCount = 0;
+  String? lastDeviceId;
   final List<SendResult> results = <SendResult>[];
 
   @override
@@ -56,6 +57,7 @@ class FakeSender implements TelegramResultSender {
     String? filePath,
     required DateTime collectedAt,
   }) async {
+    lastDeviceId = deviceId;
     final SendResult r = results[callCount];
     callCount++;
     return r;
@@ -99,6 +101,7 @@ void main() {
       sender: fs,
       db: db,
       readChatId: () => '5887530234',
+      deviceId: 'test-device-ffi', // GAP-CONTRACT-002 FIX: gia tri test ro rang, khong phai 'ios-dev-001'
     );
   });
 
@@ -245,6 +248,33 @@ void main() {
       final List<Map<String, Object?>> rows = await db.query(DbTables.sendLog);
       expect(rows.first['method'], 'sendDocument');
       expect(rows.first['method'], isNot('sendMessage'));
+    });
+
+    test('13. oversize -> send_log.outcome == failed_oversize', () async {
+      fq.packets.add(pk(1, 'S13'));
+      fs.results.add(const SendResult(
+        status: SendStatus.oversize,
+        description: 'tep vuot 50MB',
+      ));
+      await d.runOnce(now: now);
+      final List<Map<String, Object?>> rows = await db.query(DbTables.sendLog);
+      expect(rows.first['outcome'], 'failed_oversize');
+    });
+
+    test('14. packet co deviceId rieng -> truyen dung deviceId cho sender', () async {
+      fq.packets.add(QueuedPacketRef(
+        id: 1,
+        sessionId: 'S14',
+        payloadKind: 'location',
+        payloadPath: null,
+        recordCount: 1,
+        attempts: 0,
+        nextAttemptAt: '2026-01-01T00:00:00Z',
+        deviceId: 'custom-device-override',
+      ));
+      fs.results.add(const SendResult(status: SendStatus.success, messageId: 1));
+      await d.runOnce(now: now);
+      expect(fs.lastDeviceId, 'custom-device-override');
     });
   });
 }

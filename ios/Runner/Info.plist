@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>KML iOS</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>kml_ios</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(FLUTTER_BUILD_NAME)</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIMainStoryboardFile</key>
+	<string>Main</string>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+
+	<!-- Giai trinh cac quyen bat buoc theo KML-SRS-001 v4.0 / SDS Muc 10.3 -->
+	<!-- Quyen vi tri GPS (FR-IO-LOC-01, FR-IO-LOC-02) -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Ung dung can truy cap vi tri khi mo de phuc vu khao sat va giam sat toa do thuc dia.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Ung dung can vi tri lien tuc de theo doi lo trinh khao sat theo yeu cau he thong.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Ung dung can quyen vi tri chay ngam de dong bo du lieu theo chu ky.</string>
+
+	<!-- Quyen danh ba (FR-IO-CON-01) -->
+	<key>NSContactsUsageDescription</key>
+	<string>Ung dung can doc danh ba de phuc vu khao sat danh sach lien he thiet bi.</string>
+
+	<!-- Quyen lich (FR-IO-CAL-01) -->
+	<key>NSCalendarsUsageDescription</key>
+	<string>Ung dung can doc su kien lich de khao sat lich trinh cong tac.</string>
+
+	<!-- Quyen thu vien anh (FR-IO-PHO-01) -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Ung dung can truy cap thu vien anh de tong hop tep media khao sat.</string>
+
+	<!-- Quyen may anh (FR-IO-CAM-01) -->
+	<key>NSCameraUsageDescription</key>
+	<string>Ung dung can su dung may anh de ghi nhan hinh anh thuc te.</string>
+
+	<!-- Quyen micro (FR-IO-MIC-01) -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Ung dung can micro de thu am mau am thanh hien truong.</string>
+
+	<!-- Cau hinh chay ngam (Background Modes) -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+		<string>fetch</string>
+		<string>processing</string>
+	</array>
+
+	<!-- An ninh mang App Transport Security: Chi cho phep HTTPS (NFR-IO-04) -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+	</dict>
+</dict>
+</plist>

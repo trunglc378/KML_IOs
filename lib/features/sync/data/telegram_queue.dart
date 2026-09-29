@@ -14,6 +14,7 @@ class QueuedPacket {
     required this.recordCount,
     required this.attempts,
     required this.nextAttemptAt,
+    this.deviceId,
   });
 
   final int id;
@@ -23,6 +24,7 @@ class QueuedPacket {
   final int recordCount;
   final int attempts;
   final String nextAttemptAt;
+  final String? deviceId;
 }
 
 /// Truy cap bang telegram_queue.
@@ -42,6 +44,7 @@ class TelegramQueue implements PacketQueue {
     required String payloadKind,
     required String payloadPath,
     required int recordCount,
+    String? deviceId,
   }) async {
     final String now = DateTime.now().toUtc().toIso8601String();
     await db.insert(
@@ -54,6 +57,7 @@ class TelegramQueue implements PacketQueue {
         'attempts': 0,
         'createdAt': now,
         'nextAttemptAt': now,
+        'deviceId': deviceId,
         'terminal': 0,
       },
       conflictAlgorithm: ConflictAlgorithm.ignore,
@@ -82,6 +86,7 @@ class TelegramQueue implements PacketQueue {
           recordCount: (r['recordCount'] as int?) ?? 0,
           attempts: (r['attempts'] as int?) ?? 0,
           nextAttemptAt: r['nextAttemptAt'] as String,
+          deviceId: r['deviceId'] as String?,
         )).toList();
   }
 
