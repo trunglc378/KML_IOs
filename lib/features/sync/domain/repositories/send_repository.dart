@@ -1,4 +1,4 @@
-import 'entities/queued_packet_entity.dart';
+import '../entities/queued_packet_entity.dart';
 
 /// Hop dong repository cho viec quan ly hang doi va phan phoi goi ket qua.
 ///

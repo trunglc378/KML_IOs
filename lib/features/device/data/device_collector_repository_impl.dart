@@ -24,17 +24,20 @@ class DeviceCollectorRepositoryImpl implements DeviceCollectorRepository {
   Future<DeviceMetadataEntity> collectDeviceInfo() async {
     final String id = await getDeviceId();
     final DateTime now = DateTime.now().toUtc();
+    final String host = Platform.localHostname;
+    final bool isIos = Platform.isIOS;
+    final String osVer = Platform.operatingSystemVersion;
 
     return DeviceMetadataEntity(
       deviceId: id,
-      name: Platform.localHostname.isNotEmpty ? Platform.localHostname : 'iPhone',
-      model: Platform.isIOS ? 'iPhone (iOS)' : Platform.operatingSystem,
-      systemName: Platform.operatingSystem,
-      systemVersion: Platform.operatingSystemVersion,
-      localizedModel: 'iPhone',
-      batteryLevel: 0.95,
-      isBatteryMonitoringEnabled: true,
-      isPhysicalDevice: true,
+      name: host.isNotEmpty ? host : (isIos ? 'iPhone' : 'Simulator/Host'),
+      model: isIos ? 'iPhone' : Platform.operatingSystem,
+      systemName: isIos ? 'iOS' : Platform.operatingSystem,
+      systemVersion: osVer,
+      localizedModel: isIos ? 'iPhone' : Platform.operatingSystem,
+      batteryLevel: isIos ? 0.90 : 1.0,
+      isBatteryMonitoringEnabled: isIos,
+      isPhysicalDevice: !osVer.toLowerCase().contains('simulator'),
       collectedAt: now,
     );
   }

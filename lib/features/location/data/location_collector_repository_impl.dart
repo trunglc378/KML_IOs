@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../domain/entities/location_entity.dart';
@@ -52,10 +53,22 @@ class LocationCollectorRepositoryImpl implements LocationCollectorRepository {
 
   @override
   Stream<LocationEntity> get continuousLocationStream {
-    const LocationSettings locationSettings = LocationSettings(
-      accuracy: LocationAccuracy.high,
-      distanceFilter: 10,
-    );
+    final LocationSettings locationSettings;
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      locationSettings = AppleSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 10,
+        activityType: ActivityType.fitness,
+        pauseLocationUpdatesAutomatically: true,
+        showBackgroundLocationIndicator: false,
+        allowBackgroundLocationUpdates: true,
+      );
+    } else {
+      locationSettings = const LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 10,
+      );
+    }
     return Geolocator.getPositionStream(locationSettings: locationSettings)
         .map((Position pos) => LocationEntity(
               latitude: pos.latitude,

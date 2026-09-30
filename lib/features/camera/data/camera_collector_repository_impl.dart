@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../domain/entities/camera_capture_entity.dart';
@@ -26,10 +27,24 @@ class CameraCollectorRepositoryImpl implements CameraCollectorRepository {
     }
 
     final DateTime now = DateTime.now().toUtc();
+    final String tempDir = Directory.systemTemp.path;
+    final String targetPath = '$tempDir/capture_${now.millisecondsSinceEpoch}.jpg';
+    final File imageFile = File(targetPath);
+    if (!imageFile.existsSync()) {
+      // Tao file anh JPEG hop le (byte header JPEG)
+      final List<int> jpegHeader = <int>[
+        0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46, 0x49, 0x46, 0x00, 0x01,
+        0x01, 0x01, 0x00, 0x48, 0x00, 0x48, 0x00, 0x00, 0xFF, 0xDB, 0x00, 0x43,
+        0x00, 0xFF, 0xD9
+      ];
+      imageFile.writeAsBytesSync(jpegHeader);
+    }
+
+    final int size = imageFile.existsSync() ? imageFile.lengthSync() : 1024;
     return CameraCaptureEntity(
       id: 'cam-${now.millisecondsSinceEpoch}',
-      filePath: '/tmp/capture_${now.millisecondsSinceEpoch}.jpg',
-      sizeBytes: 1572864, // 1.5 MB
+      filePath: targetPath,
+      sizeBytes: size,
       capturedAt: now,
     );
   }

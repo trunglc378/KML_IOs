@@ -82,6 +82,11 @@
 		<string>fetch</string>
 		<string>processing</string>
 	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.kml.ios.backgroundSync</string>
+		<string>workmanager.background.task</string>
+	</array>
 
 	<!-- An ninh mang App Transport Security: Chi cho phep HTTPS (NFR-IO-04) -->
 	<key>NSAppTransportSecurity</key>

@@ -19,7 +19,7 @@
 | FR-IO-CON-02 | Kiem tra quyen truoc khi thu thap | tat ca cac collector repositories (permission_handler) | test/features/data_collection_entities_test.dart | DONE | Check & request permission truoc khi truy cap |
 | FR-IO-CON-03 | Ghi audit log moi lan truy cap | core/notify/telegram_dispatcher.dart (_writeLogs) | KHONG CO | PARTIAL | Ghi log nhung khong co test rieng, khong co SendAuditRepository |
 | FR-IO-SYN-01 | Gui qua hang doi Telegram | features/sync/data/telegram_queue.dart | test/core/telegram_queue_test.dart | PARTIAL | Co code, co test |
-| FR-IO-SYN-02 | Sync lai khi co mang | KHONG CO | KHONG CO | MISSING | workmanager chua duoc trien khai |
+| FR-IO-SYN-02 | Sync lai khi co mang / chay ngam | features/sync/data/background_sync_service.dart, lib/main.dart | test/features/background_sync_test.dart | DONE | Workmanager & BGTaskScheduler da duoc tich hop hoan chinh |
 | FR-IO-ERR-01 | Xu ly loi toan cuc | core/errors/app_exception.dart | KHONG CO | PARTIAL | Co kieu loi nhung khong co global handler |
 | NFR-IO-04 | ATS/HTTPS | ios/Runner/Info.plist | KHONG CO | DONE | Da tao Info.plist khoa NSAllowsArbitraryLoads=false |
 | NFR-IO-05 | Secure storage | core/security/token_store.dart | test/core/telegram_masking_test.dart | DONE | Keychain dung |

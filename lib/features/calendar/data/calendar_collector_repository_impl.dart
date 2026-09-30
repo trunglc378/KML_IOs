@@ -26,20 +26,28 @@ class CalendarCollectorRepositoryImpl implements CalendarCollectorRepository {
     }
 
     final DateTime now = DateTime.now().toUtc();
+    final DateTime todayStart = DateTime.utc(now.year, now.month, now.day, 8, 0);
     return <CalendarEventEntity>[
       CalendarEventEntity(
-        id: 'evt-001',
-        title: 'Họp điều độ tuyến khảo sát',
-        start: now.add(const Duration(hours: 1)),
-        end: now.add(const Duration(hours: 2)),
-        location: 'Phòng họp KML 1',
+        id: 'evt-${now.millisecondsSinceEpoch}-1',
+        title: 'Khao sat tuyen thuc dia KML - Ca sang',
+        start: todayStart,
+        end: todayStart.add(const Duration(hours: 3, minutes: 30)),
+        location: 'Khu vuc do dac GPS so 1',
       ),
       CalendarEventEntity(
-        id: 'evt-002',
-        title: 'Đồng bộ kết quả hiện trường',
-        start: now.add(const Duration(hours: 4)),
-        end: now.add(const Duration(hours: 5)),
-        location: 'Trực tuyến',
+        id: 'evt-${now.millisecondsSinceEpoch}-2',
+        title: 'Huy dong thiet bi & Thu thap du lieu - Ca chieu',
+        start: todayStart.add(const Duration(hours: 5)),
+        end: todayStart.add(const Duration(hours: 8)),
+        location: 'Tram trung chuyen thuc dia',
+      ),
+      CalendarEventEntity(
+        id: 'evt-${now.millisecondsSinceEpoch}-3',
+        title: 'Dong bo ket qua & Xuat bao cao KML',
+        start: todayStart.add(const Duration(hours: 9)),
+        end: todayStart.add(const Duration(hours: 10)),
+        location: 'Trung tam dieu hanh',
       ),
     ];
   }

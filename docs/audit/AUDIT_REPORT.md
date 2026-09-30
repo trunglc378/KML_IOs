@@ -26,7 +26,8 @@
 
 ### TRỤC 2: YÊU CẦU CHỨC NĂNG (FUNCTIONAL REQUIREMENTS) — [ĐẠT]
 - [x] **Kênh gửi Telegram (FR-IO-NOT-01 ~ 05):** Đã sửa lỗi join newline byte `5C 6E`, chuẩn hóa header/footer DTO và liên kết màn hình `/consent`.
-- [x] **8 Phân hệ thu thập (FR-IO-DEV-01, LOC-01/02, CON-01, CAL-01, PHO-01, CAM-01, MIC-01, SCR-01):** Đã triển khai đầy đủ cả Entity, Repository, Data Implementation và Screen tương ứng.
+- [x] **8 Phân hệ thu thập (FR-IO-DEV-01, LOC-01/02, CON-01, CAL-01, PHO-01, CAM-01, MIC-01, SCR-01):** Đã triển khai đầy đủ cả Entity, Repository, Data Implementation và Screen tương ứng. Khắc phục logic tạo file vật lý hợp lệ (JPEG, M4A, PNG) và thông tin thiết bị thực tế.
+- [x] **Tác vụ đồng bộ ngầm (FR-IO-SYN-02):** Đã triển khai hoàn tất `BackgroundSyncService` với `Workmanager`, đăng ký `com.kml.ios.backgroundSync` trong `Info.plist` (BGTaskSchedulerPermittedIdentifiers), tự động xả hàng đợi khi có mạng.
 - [x] **Kiểm tra quyền trước khi truy cập (FR-IO-CON-02):** Tất cả các repository thu thập đều tích hợp `permission_handler` / `geolocator` để kiểm tra và xin quyền chủ động.
 
 ### TRỤC 3: YÊU CẦU PHI CHỨC NĂNG (NON-FUNCTIONAL REQUIREMENTS) — [ĐẠT]

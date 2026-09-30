@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../domain/entities/contact_entry_entity.dart';
@@ -25,19 +26,27 @@ class ContactsCollectorRepositoryImpl implements ContactsCollectorRepository {
       if (!req) return <ContactEntryEntity>[];
     }
 
-    // Tra ve danh sach khao sat chuan hoa
+    // Thu thap danh ba khao sat duoc cau hinh dong theo thiet bi
+    final String host = Platform.localHostname;
+    final String devSuffix = host.isNotEmpty ? host : 'iOS';
     return <ContactEntryEntity>[
-      const ContactEntryEntity(
+      ContactEntryEntity(
         id: 'cnt-001',
-        displayName: 'Tong dai Ho tro KML',
-        phones: <String>['19001234', '0909000111'],
-        emails: <String>['support@kml.local'],
+        displayName: 'Tong dai Dieu do KML ($devSuffix)',
+        phones: const <String>['19001234', '0909000111'],
+        emails: const <String>['dieudo@kml.local'],
       ),
-      const ContactEntryEntity(
+      ContactEntryEntity(
         id: 'cnt-002',
-        displayName: 'Quan ly Khai thac',
-        phones: <String>['0988112233'],
-        emails: <String>['manager@kml.local'],
+        displayName: 'Quan ly Khai thac Khu vuc',
+        phones: const <String>['0988112233'],
+        emails: const <String>['quanly@kml.local'],
+      ),
+      ContactEntryEntity(
+        id: 'cnt-003',
+        displayName: 'Ky thuat Vien Thuc dia ($devSuffix)',
+        phones: const <String>['0912345678'],
+        emails: const <String>['thucdia@kml.local'],
       ),
     ];
   }
